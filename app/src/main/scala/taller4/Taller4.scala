@@ -16,6 +16,7 @@ object Taller4{
   def main(args: Array[String]): Unit = {
     val objNewton = new Newton()
     println(saludo())
+    println("Hola Mundo")
     println(
       withWarmer(new Warmer.Default) measure {
         (1 to 100000000).toArray
