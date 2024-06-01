@@ -20,6 +20,7 @@ object Taller4{
     println(
       withWarmer(new Warmer.Default) measure {
         (1 to 100000000).toArray
+        println()
       }
     )
   }
