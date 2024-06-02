@@ -24,4 +24,10 @@ class Newton {
     val expr5 = Prod(Div(expr1, expr2), Resta(expr3, expr4))
     val expr6 = Expo(Atomo('x'), Numero(3))
   }
+  println(mostrar(expr1))
+  println(mostrar(expr2))
+  println(mostrar(expr3))
+  println(mostrar(expr4))
+  println(mostrar(expr5))
+  println(mostrar(expr6))
 }
