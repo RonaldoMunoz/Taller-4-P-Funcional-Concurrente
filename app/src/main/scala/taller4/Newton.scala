@@ -2,7 +2,6 @@ package taller4
 
 class Newton {
 
-  // 1.2 Mostrando expresiones
   def mostrar (e: Expr): String =
     e match {
       case Numero(d) => d.toString
@@ -29,24 +28,8 @@ class Newton {
 
     }
   }
-
-  //1.4 Evaluar expresiones
-  def evaluar (f:Expr , a:Atomo ,v:Double ):Double = {
-    f match {
-      case Numero(d) => d
-      case Atomo(x) => if (x == a.x) v else 0
-      case Suma(e1, e2) => evaluar(e1, a, v) + evaluar(e2, a, v)
-      case Prod(e1, e2) => evaluar(e1, a, v) * evaluar(e2, a, v)
-      case Resta(e1, e2) => evaluar(e1, a, v) - evaluar(e2, a, v)
-      case Div(e1, e2) => evaluar(e1, a, v) / evaluar(e2, a, v)
-      case Expo(e1, e2) => Math.pow(evaluar(e1, a, v), evaluar(e2, a, v))
-      case Logaritmo(e1) => Math.log(evaluar(e1, a, v))
-    }
-  }
-
-  // 1.5. Limpiando expresiones
   def limpiar(expr: Expr): Expr =
-    e match {
+    expr match {
     case Suma(Numero(0), e) => limpiar(e)
     case Suma(e, Numero(0)) => limpiar(e)
     case Prod(Numero(1), e) => limpiar(e)
@@ -66,6 +49,20 @@ class Newton {
     case Expo(e1, e2) => Expo(limpiar(e1), limpiar(e2))
     case Logaritmo(e) => Logaritmo(limpiar(e))
     case e => e
+  }
+
+  //1.4 Evaluar expresiones
+  def evaluar (f:Expr , a:Atomo ,v:Double ):Double = {
+    f match {
+      case Numero(d) => d
+      case Atomo(x) => if (x == a.x) v else 0
+      case Suma(e1, e2) => evaluar(e1, a, v) + evaluar(e2, a, v)
+      case Prod(e1, e2) => evaluar(e1, a, v) * evaluar(e2, a, v)
+      case Resta(e1, e2) => evaluar(e1, a, v) - evaluar(e2, a, v)
+      case Div(e1, e2) => evaluar(e1, a, v) / evaluar(e2, a, v)
+      case Expo(e1, e2) => Math.pow(evaluar(e1, a, v), evaluar(e2, a, v))
+      case Logaritmo(e1) => Math.log(evaluar(e1, a, v))
+    }
   }
 
   // Raices Newton

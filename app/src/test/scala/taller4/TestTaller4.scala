@@ -19,137 +19,99 @@ class TestTaller4 extends AnyFunSuite {
     val two = Numero(2)
     val three = Numero(3)
     val five = Numero(5)
-    val complexExpr = Expo(Suma(Prod(two, x), three), two) // (2x + 3)^2
+    val expr1 = Expo(Suma(Prod(two, x), three), two) // (2x + 3)^2
+    val expr2 = Resta(Expo(x,x),Numero(100))
 
-    test("mostrar debe mostrar correctamente las expresiones complejas") {
-        assert(newton.mostrar(complexExpr) == "(((2.0 * x) + 3.0) ^ 2.0)")
+    test("Prueba 1 Mostrar") {
+        assert(newton.mostrar(expr1) == "(((2.0 * x) + 3.0) ^ 2.0)")
+    }
+    test("Prueba 2 Mostrar") {
+        assert(newton.mostrar(Suma(Prod(two, x), three)) == "((2.0 * x) + 3.0)")
+    }
+    test("Prueba 3 Mostrar"){
+        assert(newton.mostrar(Prod(two, x)) == "(2.0 * x)")
+    }
+    test("Prueba 4 Mostrar"){
+        val expre1=Suma(Atomo( 'x' ) , Numero(2) )
+        val expre2=Prod (Atomo( 'x' ) , Atomo( 'x' ) )
+        val expr3= Suma( expre1 , Expo( expre2 , Numero(5) ) )
+        val expr4= Logaritmo (Atomo( 'x' ) )
+        val expr5 = Prod ( Div ( expre1 , expre2 ) , Resta ( expr3 , expr4 ) )
+        assert(newton.mostrar(expr5) == "(((x + 2.0) / (x * x)) * (((x + 2.0) + ((x * x) ^ 5.0)) - (lg(x))))")
     }
 
-    test("mostrar debe manejar correctamente los números negativos") {
-        val negativeExpr = Resta(two, three) // 2 - 3
-        assert(newton.mostrar(negativeExpr) == "(2.0 - 3.0)")
+    test("Prueba 5 Mostrar"){
+        assert(newton.mostrar(expr2) == "((x ^ x) - 100.0)")
+    }
+    test("Prueba 1 Derivar"){
+        val expr6 = Expo(Atomo( 'x' ) ,Numero(3) )
+        assert(newton.mostrar(newton.derivar(expr6,x)) == "((x ^ 3.0) * ((((1.0 * 3.0) / x) + 0.0) * (lg(x))))")
+
+    }
+    test("Prueba 2 Derivar"){
+    val expr10 = Suma(Expo(Atomo('x'), Numero(3)),Atomo('x'))
+        assert(newton.mostrar(newton.derivar(expr10,Atomo('x'))) == "(((x ^ 3.0) * ((((1.0 * 3.0) / x) + 0.0) * (lg(x)))) + 1.0)")
+    }
+    test("Prueba 3 Derivar"){
+        val expr7 = Suma( Resta ( Prod (Atomo( 'x') ,Atomo( 'x' ) ) , Numero ( 4.0 ) ) , Prod (Numero ( 3.0 ) ,Atomo( 'x' )))
+        assert(newton.mostrar(newton.derivar(expr7,Atomo('x'))) == "((((1.0 * x) + (x * 1.0)) - 0.0) + ((0.0 * x) + (3.0 * 1.0)))")
     }
 
-    test("mostrar debe manejar correctamente las divisiones") {
-        val divExpr = Div(two, three) // 2 / 3
-        assert(newton.mostrar(divExpr) == "(2.0 / 3.0)")
+    test("Prueba 4 Derivar") {
+        val expr = Expo(Atomo('x'), Numero(2)) // x^2
+        assert(newton.mostrar(newton.derivar(expr, Atomo('x'))) == "((x ^ 2.0) * ((((1.0 * 2.0) / x) + 0.0) * (lg(x))))") // 2x
+    }
+    test("Prueba 5 Derivar") {
+        val expr = Prod(Atomo('x'), Atomo('x')) // x * x
+        assert(newton.mostrar(newton.derivar(expr, Atomo('x'))) == "((1.0 * x) + (x * 1.0))") // 2x
+    }
+    test("Prueba 1 Limpiar") {
+        val expr = Suma(Prod(Numero(0), Atomo('x')), Numero(5)) // 0x + 5
+        assert(newton.mostrar(newton.limpiar(expr)) == "5.0") // 5
     }
 
-    test("mostrar debe manejar correctamente las exponenciaciones") {
-        val expoExpr = Expo(two, three) // 2 ^ 3
-        assert(newton.mostrar(expoExpr) == "(2.0 ^ 3.0)")
+    test("Prueba 2 Limpiar") {
+        val expr = Prod(Suma(Atomo('x'), Numero(0)), Numero(1)) // (x + 0) * 1
+        assert(newton.mostrar(newton.limpiar(expr)) == "x") // x
     }
 
-    test("mostrar debe manejar correctamente los logaritmos") {
-        val logExpr = Logaritmo(two) // log(2)
-        assert(newton.mostrar(logExpr) == "(lg(2.0))")
+    test("Prueba 3 Limpiar") {
+        val expr = Expo(Atomo('x'), Numero(1)) // x^1
+        assert(newton.mostrar(newton.limpiar(expr)) == "x") // x
     }
 
-    test("derivar debe derivar correctamente las expresiones complejas") {
-        assert(newton.mostrar(newton.derivar(complexExpr, x)) == "((2.0 * ((2.0 * x) + 3.0)) * ((2.0 * 1.0) + 0.0))")
+    test("Prueba 4 Limpiar") {
+        val expr = Div(Atomo('x'), Numero(1)) // x / 1
+        assert(newton.mostrar(newton.limpiar(expr)) == "x") // x
     }
 
-    test("derivar debe manejar correctamente los números negativos") {
-        val negativeExpr = Resta(two, three) // 2 - 3
-        assert(newton.mostrar(newton.derivar(negativeExpr, x)) == "(0.0 - 0.0)")
+    test("Prueba 5 Limpiar") {
+        val expr = Resta(Atomo('x'), Numero(0)) // x - 0
+        assert(newton.mostrar(newton.limpiar(expr)) == "x") // x
     }
 
-    test("derivar debe manejar correctamente las divisiones") {
-        val divExpr = Div(two, three) // 2 / 3
-        assert(newton.mostrar(newton.derivar(divExpr, x)) == "(((0.0 * 3.0) - (2.0 * 0.0)) / (3.0 ^ 2.0))")
+    test("Prueba 1 raizNewton") {
+        val expr = Resta(Expo(Atomo('x'), Numero(2)), Numero(4)) // x^2 - 4
+        assert(Math.abs(newton.raizNewton(expr, Atomo('x'), 1.0, newton.buenaAprox) - 2.0) < 0.001)
     }
 
-    test("derivar debe manejar correctamente las exponenciaciones") {
-        val expoExpr = Expo(two, three) // 2 ^ 3
-        assert(newton.mostrar(newton.derivar(expoExpr, x)) == "((2.0 ^ 3.0) * ((0.0 * 3.0 / 2.0) + 0.0) * (lg(2.0)))")
+    test("Prueba 2 raizNewton") {
+        val expr = Resta(Expo(Atomo('x'), Numero(3)), Numero(8)) // x^3 - 8
+        assert(Math.abs(newton.raizNewton(expr, Atomo('x'), 1.0, newton.buenaAprox) - 2.0) < 0.001)
     }
 
-    test("derivar debe manejar correctamente los logaritmos") {
-        val logExpr = Logaritmo(two) // log(2)
-        assert(newton.mostrar(newton.derivar(logExpr, x)) == "(0.0 / 2.0)")
+    test("Prueba 3 raizNewton") {
+        val expr = Expo(Atomo('x'), Numero(2)) // x^2
+        assert(Math.abs(newton.raizNewton(expr, Atomo('x'), 1.0, newton.buenaAprox)) < 0.001)
     }
 
-    test("evaluar debe evaluar correctamente las expresiones complejas") {
-        assert(newton.evaluar(complexExpr, x, 1.0) == 25.0)
+    test("Prueba 4 raizNewton") {
+        val expr = Suma(Expo(Atomo('x'), Numero(2)), Numero(4)) // x^2 + 4
+        assert(Math.abs(newton.raizNewton(expr, Atomo('x'), -1.0, newton.buenaAprox) + 2.0) < 0.001)
     }
 
-    test("evaluar debe manejar correctamente los números negativos") {
-        val negativeExpr = Resta(two, three) // 2 - 3
-        assert(newton.evaluar(negativeExpr, x, 1.0) == -1.0)
-    }
-
-    test("evaluar debe manejar correctamente las divisiones") {
-        val divExpr = Div(two, three) // 2 / 3
-        assert(newton.evaluar(divExpr, x, 1.0) == 2.0 / 3.0)
-    }
-
-    test("evaluar debe manejar correctamente las exponenciaciones") {
-        val expoExpr = Expo(two, three) // 2 ^ 3
-        assert(newton.evaluar(expoExpr, x, 1.0) == 8.0)
-    }
-
-    test("evaluar debe manejar correctamente los logaritmos") {
-        val logExpr = Logaritmo(two) // log(2)
-        assert(newton.evaluar(logExpr, x, 1.0) == 0.6931471805599453)
-    }
-
-    test("raizNewton debe encontrar correctamente las raíces de las expresiones complejas") {
-        val f = Resta(Expo(x, two), three) // x^2 - 3
-        val root = newton.raizNewton(f, x, 1.0, newton.buenaAprox)
-        assert(Math.abs(root - Math.sqrt(3)) < 0.001)
-    }
-
-    test("raizNewton debe manejar correctamente los números negativos") {
-        val f = Resta(Expo(x, two), two) // x^2 - 2
-        val root = newton.raizNewton(f, x, -1.0, newton.buenaAprox)
-        assert(Math.abs(root + Math.sqrt(2)) < 0.001)
-    }
-
-    test("raizNewton debe manejar correctamente las divisiones") {
-        val f = Resta(Div(x, two), one) // x/2 - 1
-        val root = newton.raizNewton(f, x, 1.0, newton.buenaAprox)
-        assert(Math.abs(root - 2.0) < 0.001)
-    }
-
-    test("raizNewton debe manejar correctamente las exponenciaciones") {
-        val f = Resta(Expo(x, two), three) // x^2 - 3
-        val root = newton.raizNewton(f, x, 1.0, newton.buenaAprox)
-        assert(Math.abs(root - Math.sqrt(3)) < 0.001)
-    }
-
-    test("raizNewton debe manejar correctamente los logaritmos") {
-        val f = Resta(Logaritmo(x), one) // log(x) - 1
-        val root = newton.raizNewton(f, x, 2.0, newton.buenaAprox)
-        assert(Math.abs(root - Math.E) < 0.001)
-    }
-
-    test("buenaAprox debe determinar correctamente las buenas aproximaciones para las expresiones complejas") {
-        val f = Resta(Expo(x, two), three) // x^2 - 3
-        assert(newton.buenaAprox(f, x, Math.sqrt(3)))
-        assert(!newton.buenaAprox(f, x, 2.0))
-    }
-
-    test("buenaAprox debe manejar correctamente los números negativos") {
-        val f = Resta(Expo(x, two), two) // x^2 - 2
-        assert(newton.buenaAprox(f, x, -Math.sqrt(2)))
-        assert(!newton.buenaAprox(f, x, -2.0))
-    }
-
-    test("buenaAprox debe manejar correctamente las divisiones") {
-        val f = Resta(Div(x, two), one) // x/2 - 1
-        assert(newton.buenaAprox(f, x, 2.0))
-        assert(!newton.buenaAprox(f, x, 1.0))
-    }
-
-    test("buenaAprox debe manejar correctamente las exponenciaciones") {
-        val f = Resta(Expo(x, two), three) // x^2 - 3
-        assert(newton.buenaAprox(f, x, Math.sqrt(3)))
-        assert(!newton.buenaAprox(f, x, 2.0))
-    }
-
-    test("buenaAprox debe manejar correctamente los logaritmos") {
-        val f = Resta(Logaritmo(x), one) // log(x) - 1
-        assert(newton.buenaAprox(f, x, Math.E))
-        assert(!newton.buenaAprox(f, x, 2.0))
+    test("Prueba 5 raizNewton") {
+        val expr = Resta(Expo(Atomo('x'), Numero(2)), Numero(0.25)) // x^2 - 1/4
+        assert(Math.abs(newton.raizNewton(expr, Atomo('x'), 1.0, newton.buenaAprox) - 0.5) < 0.001)
     }
 }

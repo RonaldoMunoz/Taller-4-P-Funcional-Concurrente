@@ -15,9 +15,12 @@ object Taller4 {
 
   def main(args: Array[String]): Unit = {
     val objNewton = new Newton()
-    val expr = Expo(Atomo('x'), Numero(3))
-    val e3 = Suma( Resta ( Prod (Atomo( 'x') ,Atomo( 'x' ) ) , Numero ( 4.0 ) ) , Prod (Numero ( 3.0 ) ,Atomo( 'x' ) ) )
-    println(objNewton.raizNewton(e3 , Atomo( 'x') , 2.0 , objNewton.buenaAprox))
+    val expr6 = Expo(Atomo( 'x' ) ,Numero(3) )
+    val expr = Suma(Expo(Atomo('x'), Numero(3)),Atomo('x'))
+    val e3 = Suma( Resta ( Prod (Atomo( 'x') ,Atomo( 'x' ) ) , Numero ( 4.0 ) ) , Prod (Numero ( 3.0 ) ,Atomo( 'x' )))
+    //println(objNewton.raizNewton(e3 , Atomo( 'x') , 2.0 , objNewton.buenaAprox))
+    val expr1 = Expo(Suma(Prod(Numero(2), Atomo('x')), Numero(3)), Numero(2)) // (2x + 3)^2
+    println(objNewton.mostrar(objNewton.derivar(expr, Atomo('x'))))
     /*    println("Hola Mundo")
     println(
       withWarmer(new Warmer.Default) measure {
