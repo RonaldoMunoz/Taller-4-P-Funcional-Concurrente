@@ -13,15 +13,20 @@ class Newton {
       case Expo(e1, e2) => s"(${mostrar(e1)} ^ ${mostrar(e2)})"
       case Logaritmo(e1) => s"(lg(${mostrar(e1)}))"
     }
-  object main(): Unit = {
-    import Expr._
 
-    val expr1 = Suma(Atomo('x'), Numero(2))
-    val expr2 = Prod(Atomo('x'), Atomo('x'))
-    val expr3 = Suma(expr1, Expo(expr2, Numero(5)))
-    val expr4 = Logaritmo(Atomo('x'))
-    val expr5 = Prod(Div(expr1, expr2), Resta(expr3, expr4))
-    val expr6 = Expo(Atomo('x'), Numero(3))
+  // 1.3 Derivar expresiones
+  def derivar (f:Expr,a:Atomo): Expr = {
+    f match {
+      case Numero(d) => Numero(0)
+      case Atomo(x) => if (x == a.x) Numero(1) else Numero(0)
+      case Suma(e1, e2) => Suma(derivar(e1, a), derivar(e2, a))
+      case Prod(e1, e2) => Suma(Prod(derivar(e1, a), e2), Prod(e1, derivar(e2, a)))
+      case Resta(e1, e2) => Resta(derivar(e1, a), derivar(e2, a))
+      case Div(e1, e2) => Div(Resta(Prod(derivar(e1, a), e2), Prod(e1, derivar(e2, a))), Expo(e2, Numero(2)))
+      case Expo(e1, e2) => Prod(Expo(e1, e2), Prod(Suma(Div(Prod(derivar(e1, a), e2), e1), derivar(e2, a)), Logaritmo(e1)))
+      case Logaritmo(e1) => Div(derivar(e1, a), e1)
+
+    }
   }
   def limpiar(expr: Expr): Expr =
     expr match {
@@ -45,5 +50,34 @@ class Newton {
     case Logaritmo(e) => Logaritmo(limpiar(e))
     case e => e
   }
-  //para actualizar
+
+  //1.4 Evaluar expresiones
+  def evaluar (f:Expr , a:Atomo ,v:Double ):Double = {
+    f match {
+      case Numero(d) => d
+      case Atomo(x) => if (x == a.x) v else 0
+      case Suma(e1, e2) => evaluar(e1, a, v) + evaluar(e2, a, v)
+      case Prod(e1, e2) => evaluar(e1, a, v) * evaluar(e2, a, v)
+      case Resta(e1, e2) => evaluar(e1, a, v) - evaluar(e2, a, v)
+      case Div(e1, e2) => evaluar(e1, a, v) / evaluar(e2, a, v)
+      case Expo(e1, e2) => Math.pow(evaluar(e1, a, v), evaluar(e2, a, v))
+      case Logaritmo(e1) => Math.log(evaluar(e1, a, v))
+    }
+  }
+
+  // Raices Newton
+  def raizNewton(f: Expr, a: Atomo, x0: Double, ba: (Expr, Atomo, Double) => Boolean): Double = {
+    val maxIterations = 1000 // Define el maximo de iteraciones
+    (1 to maxIterations).foldLeft(x0) { (x, _) =>
+      if (ba(f, a, x)) x
+      else {
+        val fx = evaluar(f, a, x)
+        val dfx = evaluar(derivar(f, a), a, x)
+        x - fx / dfx
+      }
+    }
+  }
+  def buenaAprox( f : Expr , a : Atomo , d : Double): Boolean = {
+    evaluar(f,a,d) < 0.001
+  }
 }
