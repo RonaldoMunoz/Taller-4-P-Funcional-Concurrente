@@ -46,4 +46,21 @@ class Newton {
   // Limpiando Expresiones
 
 
+  // Raices Newton
+
+  def raizNewton(f: Expr, a: Atomo, x0: Double, ba: (Expr, Atomo, Double) => Boolean): Double = {
+    val maxIterations = 1000 // Define el maximo de iteraciones
+    (1 to maxIterations).foldLeft(x0) { (x, _) =>
+      if (ba(f, a, x)) x
+      else {
+        val fx = evaluar(f, a, x)
+        val dfx = evaluar(derivar(f, a), a, x)
+        x - fx / dfx
+      }
+    }
+  }
+
+ def buenaAprox( f : Expr , a : Atomo , d : Double): Boolean = {
+    evaluar(f,a,d) < 0.001
+  }
 }
