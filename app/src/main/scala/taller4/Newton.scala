@@ -29,6 +29,7 @@ class Newton {
 
     }
   }
+
   //1.4 Evaluar expresiones
     def evaluar (f:Expr , a:Atomo ,v:Double ):Double = {
       f match {
