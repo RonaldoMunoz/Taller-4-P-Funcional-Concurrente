@@ -45,4 +45,5 @@ class Newton {
     case Logaritmo(e) => Logaritmo(limpiar(e))
     case e => e
   }
+  //para actualizar
 }
