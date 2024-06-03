@@ -9,14 +9,15 @@ import org.scalameter.measure
 import org.scalameter.withWarmer
 import org.scalameter.Warmer
 
-object Taller4{
+object Taller4 {
 
   def saludo() = "Taller 4"
 
   def main(args: Array[String]): Unit = {
     val objNewton = new Newton()
-    println(Newton())
-    println("Hola Mundo")
+    println(objNewton.mostrar(objNewton.derivar(Expo(Atomo('x'), Numero(2)), Atomo('x'))))
+    println(objNewton.mostrar(objNewton.derivar(Expo(Atomo('x'), Numero(3)), Atomo('x'))))
+    /*    println("Hola Mundo")
     println(
       withWarmer(new Warmer.Default) measure {
         (1 to 100000000).toArray
@@ -24,4 +25,6 @@ object Taller4{
       }
     )
   }
- }
+  */
+  }
+}
