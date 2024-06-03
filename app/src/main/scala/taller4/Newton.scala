@@ -13,7 +13,7 @@ class Newton {
       case Expo(e1, e2) => s"(${mostrar(e1)} ^ ${mostrar(e2)})"
       case Logaritmo(e1) => s"(lg(${mostrar(e1)}))"
     }
-    object main(): Unit = {
+  object main(): Unit = {
     import Expr._
 
     val expr1 = Suma(Atomo('x'), Numero(2))
