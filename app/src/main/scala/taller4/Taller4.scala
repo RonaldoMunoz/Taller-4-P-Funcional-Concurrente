@@ -15,8 +15,8 @@ object Taller4 {
 
   def main(args: Array[String]): Unit = {
     val objNewton = new Newton()
-    println(objNewton.mostrar(objNewton.derivar(Expo(Atomo('x'), Numero(2)), Atomo('x'))))
-    println(objNewton.mostrar(objNewton.derivar(Expo(Atomo('x'), Numero(3)), Atomo('x'))))
+    val expr = Expo(Atomo('x'), Numero(3))
+    println((objNewton.evaluar(expr,Atomo('x'),2.0)))
     /*    println("Hola Mundo")
     println(
       withWarmer(new Warmer.Default) measure {
