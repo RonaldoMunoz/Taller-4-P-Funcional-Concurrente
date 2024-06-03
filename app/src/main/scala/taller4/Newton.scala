@@ -11,6 +11,7 @@ class Newton {
       case Resta(e1, e2) => s"(${mostrar(e1)} - ${mostrar(e2)})"
       case Prod(e1, e2) => s"(${mostrar(e1)} * ${mostrar(e2)})"
       case Div(e1, e2) => s"(${mostrar(e1)} / ${mostrar(e2)})"
+
       case Expo(e1, e2) => s"(${mostrar(e1)} ^ ${mostrar(e2)})"
       case Logaritmo(e1) => s"(lg(${mostrar(e1)}))"
     }

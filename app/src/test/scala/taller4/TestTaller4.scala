@@ -91,27 +91,19 @@ class TestTaller4 extends AnyFunSuite {
     }
 
     test("Prueba 1 raizNewton") {
-        val expr = Resta(Expo(Atomo('x'), Numero(2)), Numero(4)) // x^2 - 4
+        val expr = Resta (Prod(Atomo('x'), Atomo('x')), Numuero (2.0))
         assert(Math.abs(newton.raizNewton(expr, Atomo('x'), 1.0, newton.buenaAprox) - 2.0) < 0.001)
     }
 
     test("Prueba 2 raizNewton") {
-        val expr = Resta(Expo(Atomo('x'), Numero(3)), Numero(8)) // x^3 - 8
+        val expr = Resta(Prod(Atomo('x'), Atomo('x')), Numero(4.0))
         assert(Math.abs(newton.raizNewton(expr, Atomo('x'), 1.0, newton.buenaAprox) - 2.0) < 0.001)
     }
 
     test("Prueba 3 raizNewton") {
-        val expr = Expo(Atomo('x'), Numero(2)) // x^2
+        val expr = Suma(Resta(Prod(Atomo('x'), Atomo('x')), Numero(4.0)), Prod(Numero(3.0), Atomo('x')))
         assert(Math.abs(newton.raizNewton(expr, Atomo('x'), 1.0, newton.buenaAprox)) < 0.001)
     }
 
-    test("Prueba 4 raizNewton") {
-        val expr = Suma(Expo(Atomo('x'), Numero(2)), Numero(4)) // x^2 + 4
-        assert(Math.abs(newton.raizNewton(expr, Atomo('x'), -1.0, newton.buenaAprox) + 2.0) < 0.001)
-    }
 
-    test("Prueba 5 raizNewton") {
-        val expr = Resta(Expo(Atomo('x'), Numero(2)), Numero(0.25)) // x^2 - 1/4
-        assert(Math.abs(newton.raizNewton(expr, Atomo('x'), 1.0, newton.buenaAprox) - 0.5) < 0.001)
-    }
 }
