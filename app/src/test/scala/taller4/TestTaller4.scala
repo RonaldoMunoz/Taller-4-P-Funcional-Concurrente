@@ -66,8 +66,8 @@ class TestTaller4 extends AnyFunSuite {
         assert(newton.mostrar(newton.derivar(expr, Atomo('x'))) == "((1.0 * x) + (x * 1.0))") // 2x
     }
     test("Prueba 1 Limpiar") {
-        val expr = Suma(Prod(Numero(0), Atomo('x')), Numero(5)) // 0x + 5
-        assert(newton.mostrar(newton.limpiar(expr)) == "5.0") // 5
+        val expr = Suma(Suma(Numero(0), Atomo('x')), Numero(5)) // 0+x + 5
+        assert(newton.mostrar(newton.limpiar(expr)) == "(x + 5.0)") // x+5
     }
 
     test("Prueba 2 Limpiar") {
@@ -91,18 +91,18 @@ class TestTaller4 extends AnyFunSuite {
     }
 
     test("Prueba 1 raizNewton") {
-        val expr = Resta (Prod(Atomo('x'), Atomo('x')), Numuero (2.0))
-        assert(Math.abs(newton.raizNewton(expr, Atomo('x'), 1.0, newton.buenaAprox) - 2.0) < 0.001)
+        val expr = Resta (Prod(Atomo('x'), Atomo('x')), Numero (2.0))
+        assert(newton.raizNewton(expr, Atomo('x'), 2.0, newton.buenaAprox) == 1.4142156862745099)
     }
 
     test("Prueba 2 raizNewton") {
         val expr = Resta(Prod(Atomo('x'), Atomo('x')), Numero(4.0))
-        assert(Math.abs(newton.raizNewton(expr, Atomo('x'), 1.0, newton.buenaAprox) - 2.0) < 0.001)
+        assert(newton.raizNewton(expr, Atomo('x'), 2.0, newton.buenaAprox)== 2.0)
     }
 
     test("Prueba 3 raizNewton") {
         val expr = Suma(Resta(Prod(Atomo('x'), Atomo('x')), Numero(4.0)), Prod(Numero(3.0), Atomo('x')))
-        assert(Math.abs(newton.raizNewton(expr, Atomo('x'), 1.0, newton.buenaAprox)) < 0.001)
+        assert(newton.raizNewton(expr, Atomo('x'), 2.0, newton.buenaAprox)== 1.0000029768726761)
     }
 
 
